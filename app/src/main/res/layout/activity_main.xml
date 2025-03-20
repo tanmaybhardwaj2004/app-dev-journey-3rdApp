@@ -60,7 +60,6 @@
                 android:layout_width="356dp"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/question_text_padding"
-                android:text="@string/placeholder"
                 android:textColor="@color/white" />
         </androidx.cardview.widget.CardView>
 
@@ -95,5 +94,27 @@
             app:layout_constraintHorizontal_bias="0.856"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/button_false" />
+
+        <TextView
+            android:id="@+id/score_text"
+            android:text="Score"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.68"
+            app:layout_constraintStart_toEndOf="@+id/textViewOutOf"
+            app:layout_constraintTop_toBottomOf="@+id/title_text"
+            style="@style/scorestyle" />
+
+        <TextView
+            android:id="@+id/highestscore_text"
+            style="@style/scorestyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="Highest: "
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.715"
+            app:layout_constraintStart_toEndOf="@+id/textViewOutOf"
+            app:layout_constraintTop_toBottomOf="@+id/score_text" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

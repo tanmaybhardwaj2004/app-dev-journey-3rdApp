@@ -3,6 +3,7 @@ package com.example.trivia;
 import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -17,8 +18,10 @@ import androidx.databinding.DataBindingUtil;
 import com.example.trivia.data.Repository;
 import com.example.trivia.databinding.ActivityMainBinding;
 import com.example.trivia.model.Question;
+import com.example.trivia.model.Score;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +30,8 @@ public class MainActivity extends AppCompatActivity {
     List<Question> questionList;
     private ActivityMainBinding binding;
     private int currentQuestionIndex = 0;
+    private int scoreCounter=0;
+    private Score score;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +39,8 @@ public class MainActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        score=new Score();
+        binding.scoreText.setText(MessageFormat.format("Current Score: {0}", String.valueOf(score.getScore())));
 
         questionList = new Repository().getQuestion(questionArrayList -> {
             binding.questionTextView.setText(questionArrayList.get(currentQuestionIndex).getAnswer());
@@ -71,12 +78,32 @@ public class MainActivity extends AppCompatActivity {
         if (userChoseCorrect == answer) {
             snackMessageId = R.string.correct_answer;
             fadeAnimation();
+            addPoints();
         } else {
+            deductPoints();
             snackMessageId = R.string.incorrect;
             shakeAnimation();
         }
         Snackbar.make(binding.cardView, snackMessageId, Snackbar.LENGTH_SHORT).show();
     }
+
+    private void deductPoints(){
+        if(scoreCounter>0) {
+            scoreCounter -= 100;
+            score.setScore(scoreCounter);
+            binding.scoreText.setText(MessageFormat.format("Current Score: {0}", String.valueOf(score.getScore())));
+
+        }else {
+            scoreCounter=0;
+            score.setScore(scoreCounter);
+        }
+    }
+    private void addPoints() {
+        scoreCounter+=100;
+        score.setScore(scoreCounter);
+        binding.scoreText.setText(MessageFormat.format("Current Score: {0}", String.valueOf(score.getScore())));
+       }
+
 
     private void updateCounter(ArrayList<Question> questionArrayList) {
         binding.textViewOutOf.setText(String.format(getString(R.string.text_formatted), currentQuestionIndex, questionArrayList.size()));
@@ -132,6 +159,8 @@ public class MainActivity extends AppCompatActivity {
             public void onAnimationRepeat(Animation animation) {
 
             }
+
+
         });
     }
 
